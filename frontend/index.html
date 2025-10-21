@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>ReachInbox Onebox - Demo UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: auto; }
+    .email { border: 1px solid #ddd; padding: 12px; margin-bottom: 10px; border-radius: 6px; }
+    .meta { font-size: 12px; color: #666; }
+    .tag { display:inline-block; padding:4px 8px; margin-left:8px; border-radius:4px; background:#eee; font-size:12px;}
+  </style>
+</head>
+<body>
+  <h1>ReachInbox Onebox - Demo</h1>
+  <div>
+    <input id="q" placeholder="Search subject or body..." style="width:60%">
+    <input id="account" placeholder="account filter (email)">
+    <button id="search">Search</button>
+  </div>
+  <div id="list"></div>
+
+<script>
+const apiBase = "http://localhost:3000/api/emails";
+
+async function search() {
+  const q = document.getElementById("q").value;
+  const account = document.getElementById("account").value;
+  const url = new URL(apiBase + "/search");
+  if (q) url.searchParams.set("q", q);
+  if (account) url.searchParams.set("account", account);
+  const r = await fetch(url.toString());
+  const data = await r.json();
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  if (!data.results || data.results.length===0) {
+    list.innerHTML = "<p>No results</p>";
+    return;
+  }
+  data.results.forEach(e=>{
+    const div = document.createElement("div");
+    div.className = "email";
+    div.innerHTML = `<strong>${e.subject || "(no subject)"}</strong>
+      <div class="meta">${e.from} • ${new Date(e.date).toLocaleString()} <span class="tag">${e.aiCategory||"Uncategorized"}</span></div>
+      <div style="margin-top:8px">${(e.body||"").slice(0,400).replace(/\\n/g,"<br>")}</div>`;
+    list.appendChild(div);
+  });
+}
+
+document.getElementById("search").addEventListener("click", search);
+window.onload = ()=> search();
+</script>
+</body>
+</html>
