@@ -1,0 +1,26 @@
+{
+  "name": "reachinbox-backend-starter",
+  "version": "1.0.0",
+  "description": "Starter backend for ReachInbox Onebox (TypeScript)",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.17.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "node-imap": "^0.9.6",
+    "mailparser": "^3.6.4",
+    "node-fetch": "^2.6.7",
+    "pino": "^8.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.18",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}
